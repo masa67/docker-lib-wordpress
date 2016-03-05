@@ -59,6 +59,25 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 			EOF
 			chown www-data:www-data .htaccess
 		fi
+    else
+  		if [ ! -e .htaccess ]; then
+			# NOTE: The "Indexes" option is disabled in the php:apache base image
+			cat > .htaccess <<-'EOF'
+				# BEGIN WordPress
+				<IfModule mod_rewrite.c>
+				RewriteEngine On
+				RewriteBase /
+				RewriteRule ^index\.php$ - [L]
+				RewriteCond %{REQUEST_FILENAME} !-f
+				RewriteCond %{REQUEST_FILENAME} !-d
+				RewriteRule . /index.php [L]
+				</IfModule>
+				# END WordPress
+			EOF
+		fi
+
+		chmod -R 0770 .
+        chown -R www-data:www-data .
 	fi
 
 	# TODO handle WordPress upgrades magically in the same way, but only if wp-includes/version.php's $wp_version is less than /usr/src/wordpress/wp-includes/version.php's $wp_version
