@@ -1,5 +1,7 @@
 # About this Repo
 
+This is a modified version of the official Docker Wordpress repo. The documentation of the original repo:
+
 This is the Git repo of the Docker [official image](https://docs.docker.com/docker-hub/official_repos/) for [wordpress](https://registry.hub.docker.com/_/wordpress/). See [the Docker Hub page](https://registry.hub.docker.com/_/wordpress/) for the full readme on how to use this Docker image and for information regarding contributing and issues.
 
 The full readme is generated over in [docker-library/docs](https://github.com/docker-library/docs), specificially in [docker-library/docs/wordpress](https://github.com/docker-library/docs/tree/master/wordpress).
