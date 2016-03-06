@@ -77,15 +77,18 @@ if [[ "$1" == apache2* ]] || [ "$1" == php-fpm ]; then
 		fi
 
 		chmod -R 0770 .
-        chown -R www-data:www-data .
+		chgrp -R www-data .
+		chmod g+s `find -type d`
 	fi
+
+    mysql --host mysql -u root -ppassword wordpress < dumps/dump.sql
 
 	# TODO handle WordPress upgrades magically in the same way, but only if wp-includes/version.php's $wp_version is less than /usr/src/wordpress/wp-includes/version.php's $wp_version
 
 	# version 4.4.1 decided to switch to windows line endings, that breaks our seds and awks
 	# https://github.com/docker-library/wordpress/issues/116
 	# https://github.com/WordPress/WordPress/commit/1acedc542fba2482bab88ec70d4bea4b997a92e4
-	sed -ri 's/\r\n|\r/\n/g' wp-config*
+	# sed -ri 's/\r\n|\r/\n/g' wp-config*
 
 	if [ ! -e wp-config.php ]; then
 		awk '/^\/\*.*stop editing.*\*\/$/ && c == 0 { c = 1; system("cat") } { print }' wp-config-sample.php > wp-config.php <<'EOPHP'
